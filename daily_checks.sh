@@ -7,11 +7,11 @@ bold="\e[1m"
 green="\e[32m"
 yellow="\e[33m"
 WP_URLs=('https://danzaparavivir.com' 'https://serlibreyfeliz.com')
-SOUND_FILE="/home/${USER}/.sound/Zombie.ogg"
+SOUND_FILE="/path/to/sound_file"
 
 function wordpress {
     current_version=$(curl -s https://api.wordpress.org/core/version-check/1.7/ -s | jq '.offers[] | select(.response=="upgrade") | .version' | tr -d '.' | tr -d '"')
-    installed_version=$(($(curl -s ${1} | grep -Po "(?<=${1}/wp-content/themes/wallstreet/css/bootstrap\.css\?ver=)\d\.\d\.\d\.?" | tr -d '.') - 1))
+    installed_version=$(curl -s ${1} | grep -Po "(?<=${1}/wp-content/themes/wallstreet/css/bootstrap\.css\?ver=)\d\.\d\.\d\.?" | tr -d '.')
     website_name=$(echo ${1} | grep -Po '(?<=http[s]://|www\.).*(?=\..*)')
     if [[ ${current_version} -gt "${installed_version}" ]];then
         notify-send "Wordpress Installation" ""${website_name^}" update available." -i software-update-urgent
@@ -20,6 +20,7 @@ function wordpress {
         paplay ${SOUND_FILE}
     fi
 }
+
 function help
 {
   echo -e "${red}${bold}DESCRIPTION \e[0m"
